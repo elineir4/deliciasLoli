@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import './App.css'
-import imagenHero from './assets/heroanimado3-Photoroom.png'
+import imagenHero from './assets/heroanimado3-optimized.png'
 
 const enlacesMenu = [
   'Inicio',
@@ -362,6 +362,8 @@ function Pagina() {
                         <img
                           alt="Pastel artesanal con crema chantilly, fresas frescas y frambuesas"
                           className="w-full max-w-[390px] lg:max-w-[420px] h-auto object-contain pointer-events-none transition-transform duration-300 ease-out"
+                          decoding="async"
+                          fetchPriority="high"
                           id="hero-floating-cake"
                           src={imagenHero}
                         />
