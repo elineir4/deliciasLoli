@@ -1,14 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
 import imagenHero from './assets/heroanimado3-Photoroom.png'
 
 const enlacesMenu = [
-  'Mesas dulces',
-  'Mesas saladas',
-  'Comidas',
-  'Reseñas',
-  'Contacto',
+  'Inicio',
+  'Menu',
+  'Arma tu mesa',
 ]
+
+const destinosEnlacesMenu = {
+  Inicio: '#hero-section',
+  Menu: '#productos',
+  'Arma tu mesa': '#formulario-mesa',
+}
+
+const categoriasProductos = ['Mesas dulces', 'Mesas saladas', 'Comidas','Pasteleria']
 
 const beneficios = [
   {
@@ -28,10 +34,18 @@ const beneficios = [
   },
 ]
 
+const pasosPedido = [
+  { titulo: 'Contanos tu evento', descripcion: 'Fecha, lugar y cantidad de invitados.' },
+  { titulo: 'Elegí tu menú', descripcion: 'Combiná opciones dulces y saladas.' },
+  { titulo: 'Recibí tu presupuesto', descripcion: 'Te respondemos por WhatsApp.' },
+  { titulo: 'Recibí tu pedido', descripcion: 'Retiro o entrega a domicilio.' },
+]
+
 const productos = [
   {
     nombre: 'Mesa dulce clásica (para 20 personas)',
     tipo: 'Dulce',
+    categorias: ['Mesas dulces'],
     precio: '$45.000',
     imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAn6lwwviX4UNHI7rF4y9WmJVpMSkvSn_HlDeFlSUD14BTKT7H5Doncq6ub2gC1NfBWsAnRElOj9o8_K4wL3NKBhZhHPUFUvV3b4DMlPGEhGCOcDpjWb8NrQgEhfE__OFIzXG6cB4XTwyOjYwqqgBwr0CpdSMugeOWWWq6CXPhJKuYbDEauvDmz_rVScPOtfVWp9e7oZBOim363FdX1cNCieznV4w8ko-pkjnH6zNpdERD0hPa8l4tfKA',
@@ -39,6 +53,7 @@ const productos = [
   {
     nombre: 'Mesa salada completa (para 20 personas)',
     tipo: 'Salado',
+    categorias: ['Mesas saladas'],
     precio: '$52.000',
     imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCui5RBt-J0VHmu4-dBdxEMyp9UU4_ErBbjlHPhewHZVjbbHOc3MKcWFe0oDfivCAHUpgWpNHgC3vDNjZ0xnef_KRb46_WCM7upK6qvpvmOa9HmxcL0Bvv0sq8wtt_9Fjk8RQewYDEKDUY_yUh9yfr76x7-04C_HmbUui3FKOujgFIzOXT6rL0sE5wKmsr7ufEmYUhs-1E_JuhtaEYzCsW13SsTPo1dSMXWiqgB7th0lRkw9kNvYj4JyQ',
@@ -46,19 +61,59 @@ const productos = [
   {
     nombre: 'Docena de empanadas caseras',
     tipo: 'Salado',
+    categorias: ['Comidas'],
     precio: '$16.000',
     imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAHUNWXsJgLwtiOnmQbjzsS3vKBbxVgh4tZ9PLpDJZMB9uPFFRjum3CkGkwOPxq96D94UJKBdbWoFqtnSXbYPSSUvnV48zRP9kj3IbCU_wwi76z3WLOQTrnVrVXIUkThihU0fdG1nyCj9_i4GLXDBVHQmsrW0jAreU_FQIAEwTGeGMY_9nD6rchy4GfvRzBabfYJtkm8MoYrdpwAXZoUhcx3PdOf2hNAFENZ999jZGLH8V5p-suuQnGcw',
   },
+  {
+    nombre:"Bandeja de alfajores de maicena x5",
+    tipo:'Dulce',
+    categorias:['Pasteleria'],
+    precio: '$40.000',
+    imagen:''
+  },
+  {
+    nombre:"Pizza Muzza",
+    tipo:"Salado",
+    categorias:['Comidas'],
+    precio:'$14.000',
+    imagen:''
+  },
+
+
+
+
+]
+
+const muestrasMesas = [
+  { nombre: 'Mesa dulce clásica', tipo: 'Mesa dulce clásica', imagen: productos[0].imagen },
+  { nombre: 'Mesa salada completa', tipo: 'Mesa salada', imagen: productos[1].imagen },
+  { nombre: 'Candy Bar', tipo: 'Candy bar / mesa de golosinas', imagen: productos[2].imagen },
+  {
+    nombre: 'Mesa dulce mini',
+    tipo: 'Mesa dulce mini / individual',
+    imagen: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDBuzR50vRBViucR6ZEl0eScTa2zYI-M7e8kAH6yRQIDV3ecVQ9P-C--bnCwUxme0OoBdY501dcX5iYWPcNpPxS6leL2uNGr6oXkSSapucRc0Z7GdlsjwlvbLlH-jm23IEesbU1I7Vg7YtByhHq20eLC30yKzq3CBFhb6jNVdnXo1WuXopX7SNH6L1A2hx4YtKh0Zu3mDicki_qzIOC-BvMtDrNT6KNlT0TeJKJ_o6FmxAF4wrjUlFpRQ',
+  },
+  { nombre: 'Grazing table dulce', tipo: 'Grazing table dulce', imagen: productos[0].imagen },
+  { nombre: 'Mesa dulce celiacos', tipo: 'Mesa dulce apta celiacos', imagen: productos[1].imagen },
 ]
 
 const zonasEntrega = ['Córdoba Capital', 'Villa Allende', 'La Calera', 'Mendiolaza', 'Unquillo']
 
 function Pagina() {
+  const [menuMovilAbierto, establecerMenuMovilAbierto] = useState(false)
+  const [categoriaSeleccionada, establecerCategoriaSeleccionada] = useState('Mesas dulces')
   const [zonaElegida, establecerZonaElegida] = useState('Córdoba Capital')
   const [selectorZonaAbierto, establecerSelectorZonaAbierto] = useState(false)
   const [carrito, establecerCarrito] = useState([])
   const [carritoAbierto, establecerCarritoAbierto] = useState(false)
+  const [cantidadInvitados, establecerCantidadInvitados] = useState('')
+  const [tipoEvento, establecerTipoEvento] = useState('')
+  const [mesasElegidas, establecerMesasElegidas] = useState([])
+  const [errorFormularioMesa, establecerErrorFormularioMesa] = useState('')
+  const muestrasMesasRef = useRef(null)
+  const productosFiltrados = productos.filter((producto) => producto.categorias.includes(categoriaSeleccionada))
 
   const mensajeWhatsApp = `Hola Delicias Loli! Soy de ${zonaElegida} y me gustaría consultar sobre:.`
   const enlaceWhatsApp = `https://wa.me/543515290303?text=${encodeURIComponent(mensajeWhatsApp)}`
@@ -98,62 +153,47 @@ function Pagina() {
     )
   }
 
-  useEffect(() => {
-    const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (movimientoReducido.matches) return
+  function alternarMesa(mesa) {
+    establecerMesasElegidas((mesasActuales) =>
+      mesasActuales.includes(mesa)
+        ? mesasActuales.filter((mesaActual) => mesaActual !== mesa)
+        : [...mesasActuales, mesa],
+    )
+    establecerErrorFormularioMesa('')
+  }
 
-    const seccionHero = document.getElementById('hero-section')
-    const contenedorTorta = document.getElementById('parallax-cake-wrapper')
-    const elementosParallax = document.querySelectorAll('.parallax-item')
-    if (!seccionHero || !contenedorTorta) return
+  function enviarFormularioMesa(evento) {
+    evento.preventDefault()
+    const datosFormulario = new FormData(evento.currentTarget)
+    const cantidadInvitadosFormulario = String(datosFormulario.get('cantidadInvitados') || '')
+    const tipoEventoFormulario = String(datosFormulario.get('tipoEvento') || '')
 
-    let objetivoX = 0
-    let objetivoY = 0
-    let actualX = 0
-    let actualY = 0
-
-    seccionHero.addEventListener('mousemove', (evento) => {
-      const limites = seccionHero.getBoundingClientRect()
-      const posicionX = (evento.clientX - limites.left) / limites.width - 0.5
-      const posicionY = (evento.clientY - limites.top) / limites.height - 0.5
-      objetivoX = posicionX
-      objetivoY = posicionY
-    })
-
-    seccionHero.addEventListener('mouseleave', () => {
-      objetivoX = 0
-      objetivoY = 0
-    })
-
-    function actualizarParallax() {
-      actualX += (objetivoX - actualX) * 0.08
-      actualY += (objetivoY - actualY) * 0.08
-
-      const inclinacionTortaX = -actualY * 12
-      const inclinacionTortaY = actualX * 14
-      const desplazamientoTortaX = actualX * 18
-      const desplazamientoTortaY = actualY * 14
-
-      contenedorTorta.style.transform = `translate3d(${desplazamientoTortaX}px, ${desplazamientoTortaY}px, 0) rotateX(${inclinacionTortaX}deg) rotateY(${inclinacionTortaY}deg)`
-
-      elementosParallax.forEach((elemento) => {
-        const velocidad = Number(elemento.getAttribute('data-parallax-speed') || 0.04)
-        const desplazamientoX = actualX * 100 * velocidad
-        const desplazamientoY = actualY * 100 * velocidad
-        elemento.style.transform = `translate3d(${desplazamientoX}px, ${desplazamientoY}px, 0)`
-      })
-
-      requestAnimationFrame(actualizarParallax)
+    if (mesasElegidas.length === 0) {
+      establecerErrorFormularioMesa('Elegí al menos una opción: mesa dulce o mesa salada.')
+      return
     }
 
-    const idAnimacion = requestAnimationFrame(actualizarParallax)
-    return () => cancelAnimationFrame(idAnimacion)
-  }, [])
+    const mensajeMesa = [
+      'Hola Delicias Loli! Quiero armar una mesa:',
+      `- Cantidad de invitados: ${cantidadInvitadosFormulario}`,
+      `- Tipo de evento: ${tipoEventoFormulario}`,
+      `- Mesas elegidas: ${mesasElegidas.join(' y ')}`,
+      `- Zona de entrega: ${zonaElegida}`,
+    ].join('\n')
+
+    const enlaceMesaWhatsApp = `https://wa.me/543515290303?text=${encodeURIComponent(mensajeMesa)}`
+    window.open(enlaceMesaWhatsApp, '_blank', 'noopener,noreferrer')
+  }
+
+  function desplazarMuestras(direccion) {
+    const anchoTarjeta = muestrasMesasRef.current?.firstElementChild?.getBoundingClientRect().width || 280
+    muestrasMesasRef.current?.scrollBy({ left: direccion * (anchoTarjeta + 20), behavior: 'smooth' })
+  }
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_8px_24px_-4px_rgba(138,11,61,0.06)]">
-        <div className="h-20 max-w-[1280px] mx-auto px-margin-mobile md:px-margin flex items-center justify-between gap-space-sm">
+        <div className="relative flex h-20 max-w-[1280px] items-center justify-between gap-2 px-margin-mobile md:mx-auto md:gap-space-sm md:px-margin">
           <div className="flex items-center gap-space-xs shrink-0">
             <img
               alt="Logo Delicias Loli"
@@ -171,14 +211,14 @@ function Pagina() {
               <a
                 key={enlace}
                 className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap"
-                href="#"
+                href={destinosEnlacesMenu[enlace]}
               >
                 {enlace}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-space-sm shrink-0">
+          <div className="flex shrink-0 items-center gap-2 md:gap-space-sm">
             <button
               type="button"
               className="relative inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary-fixed text-primary-container transition-colors hover:bg-primary-fixed/70"
@@ -193,7 +233,7 @@ function Pagina() {
               )}
             </button>
             <a
-              className="inline-flex items-center gap-2 px-space-md py-2.5 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-md text-label-md uppercase tracking-wider shadow-[0_4px_12px_rgba(229,18,79,0.18)] hover:shadow-lg transition-all shrink-0"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-2.5 text-on-secondary shadow-[0_4px_12px_rgba(229,18,79,0.18)] transition-all hover:shadow-lg sm:h-auto sm:w-auto sm:px-space-md sm:py-2.5"
               href={enlaceWhatsApp}
               rel="noopener noreferrer"
               target="_blank"
@@ -201,16 +241,46 @@ function Pagina() {
               <span className="material-symbols-outlined text-[18px]">chat</span>
               <span className="hidden sm:inline">Hablar por WhatsApp</span>
             </a>
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface-container-low text-primary xl:hidden"
+              aria-label={menuMovilAbierto ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={menuMovilAbierto}
+              aria-controls="menu-movil"
+              onClick={() => establecerMenuMovilAbierto(!menuMovilAbierto)}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">
+                {menuMovilAbierto ? 'close' : 'menu'}
+              </span>
+            </button>
           </div>
+          {menuMovilAbierto && (
+            <nav
+              id="menu-movil"
+              className="absolute inset-x-0 top-full z-50 grid gap-1 border-t border-primary-fixed bg-surface-container-lowest px-margin-mobile py-3 shadow-lg xl:hidden md:px-margin"
+              aria-label="Navegación principal"
+            >
+              {enlacesMenu.map((enlace) => (
+                <a
+                  key={enlace}
+                  className="rounded-lg px-4 py-3 font-label-md text-label-md font-semibold text-on-surface-variant transition-colors hover:bg-primary-fixed hover:text-primary"
+                  href={destinosEnlacesMenu[enlace]}
+                  onClick={() => establecerMenuMovilAbierto(false)}
+                >
+                  {enlace}
+                </a>
+              ))}
+            </nav>
+          )}
         </div>
       </header>
 
       <main className="w-full pt-20 bg-background">
         <div className="flex flex-col w-full">
-          <section className="relative w-full bg-primary-fixed/30 overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24" id="hero-section">
+          <section className="relative w-full scroll-mt-20 border-b border-primary-fixed bg-primary-fixed/30 overflow-hidden pb-8 pt-3 sm:pb-10 sm:pt-4 lg:pb-12 lg:pt-4" id="hero-section">
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                <div className="lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda">
+              <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
+                <div className="min-w-0 lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda lg:pt-24">
                   <div className="zona-entrega-selector">
                     <span className="zona-entrega-selector__icon material-symbols-outlined" aria-hidden="true">location_on</span>
                     <div className="zona-entrega-selector__copy">
@@ -266,9 +336,7 @@ function Pagina() {
                     </a>
                     <a
                       className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-surface-container-lowest text-primary-container font-label-lg text-label-lg uppercase tracking-wider shadow-sm hover:bg-primary-container hover:text-on-primary transition-all duration-300"
-                      href={enlaceWhatsApp}
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      href="#como-pedir"
                     >
                       Armar mi mesa
                     </a>
@@ -286,10 +354,10 @@ function Pagina() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-5 relative mt-8 lg:mt-0 flex items-center justify-center min-h-[420px] lg:min-h-[480px] animar-entrada-derecha">
+                <div className="hidden lg:col-span-5 relative min-h-[480px] items-center justify-center animar-entrada-derecha lg:flex">
                   <div className="relative w-full max-w-[430px] flex flex-col items-center justify-center select-none" id="cake-interactive-stage">
                     <div className="absolute bottom-2 w-[74%] h-12 rounded-[50%] blur-md anim-cake-shadow pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(138, 11, 61, 0.22) 0%, rgba(138, 11, 61, 0.08) 45%, transparent 75%)' }} />
-                    <div className="relative w-full flex items-center justify-center transition-transform duration-200 ease-out z-10" id="parallax-cake-wrapper">
+                    <div className="relative w-full flex items-center justify-center z-10">
                       <div className="relative w-full anim-floating-cake flex items-center justify-center">
                         <img
                           alt="Pastel artesanal con crema chantilly, fresas frescas y frambuesas"
@@ -305,14 +373,9 @@ function Pagina() {
               </div>
             </div>
 
-            <div className="w-full absolute bottom-0 left-0 right-0 leading-none pointer-events-none">
-              <svg className="w-full h-12 md:h-16 text-surface-container-lowest fill-current preserve-3d" fill="none" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,32 C240,75 480,10 720,48 C960,86 1200,20 1440,55 L1440,80 L0,80 Z" />
-              </svg>
-            </div>
           </section>
 
-          <section className="w-full bg-surface-container-lowest py-12 md:py-16">
+          <section className="w-full border-b border-primary-fixed bg-surface-container-lowest py-8 md:py-12">
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
                 {beneficios.map((beneficio) => (
@@ -328,49 +391,61 @@ function Pagina() {
             </div>
           </section>
 
-          <section className="w-full bg-surface-container-lowest py-16 md:py-24" id="productos">
+          <section className="w-full scroll-mt-24 border-b border-primary-fixed bg-surface-container-lowest py-10 md:py-16" id="productos">
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin">
-              <div className="text-center max-w-2xl mx-auto mb-10">
+              <div className="text-center max-w-2xl mx-auto mb-8">
                 <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary-container uppercase font-bold tracking-tight">
                   MIRÁ LO QUE PODEMOS PREPARAR PARA VOS
                 </h2>
                 <p className="font-body-lg text-body-lg text-on-surface-variant mt-2">
                   Variedades seleccionadas con dedicación artesanal para consentir a tus invitados.
                 </p>
-                <div className="flex items-center justify-center flex-wrap gap-2 mt-8">
-                  <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary-fixed text-primary-container font-label-md text-label-md shadow-sm">
-                    <span className="w-2 h-2 rounded-full bg-secondary-container" />
-                    Mesas dulces
-                  </button>
-                  <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
-                    Mesas saladas
-                  </button>
-                  <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
-                    Empanadas
-                  </button>
-                  <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
-                    Comidas
-                  </button>
+                <div className="flex items-center justify-center flex-wrap gap-2 mt-5" aria-label="Filtrar productos por categoría">
+                  {categoriasProductos.map((categoria) => {
+                    const seleccionada = categoria === categoriaSeleccionada
+                    return (
+                      <button
+                        key={categoria}
+                        type="button"
+                        aria-pressed={seleccionada}
+                        onClick={() => establecerCategoriaSeleccionada(categoria)}
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-label-md text-label-md transition-colors ${
+                          seleccionada
+                            ? 'bg-primary-fixed text-primary-container shadow-sm'
+                            : 'bg-surface-container-low text-on-surface-variant hover:text-primary'
+                        }`}
+                      >
+                        {seleccionada && <span className="w-2 h-2 rounded-full bg-secondary-container" />}
+                        {categoria}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-                {productos.map((producto) => (
-                  <div key={producto.nombre} className="group flex flex-col bg-surface-container-lowest rounded-3xl shadow-[0_8px_24px_-4px_rgba(138,11,61,0.06)] hover:shadow-[0_16px_36px_-6px_rgba(138,11,61,0.14)] transition-all duration-300 overflow-hidden">
-                    <div className="relative h-60 overflow-hidden bg-surface-container-low">
-                      <img
-                        alt={producto.nombre}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        src={producto.imagen}
-                      />
-                      <span className="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-primary-fixed text-primary-container font-label-sm text-label-sm font-bold uppercase tracking-wider shadow-sm">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+                {productosFiltrados.map((producto) => (
+                  <div key={producto.nombre} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_6px_18px_-5px_rgba(138,11,61,0.1)] transition-all duration-300 hover:shadow-[0_12px_24px_-6px_rgba(138,11,61,0.16)]">
+                    <div className="relative h-40 overflow-hidden bg-surface-container-low sm:h-44">
+                      {producto.imagen ? (
+                        <img
+                          alt={producto.nombre}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          src={producto.imagen}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-primary-fixed/40 text-primary-container" aria-hidden="true">
+                          <span className="material-symbols-outlined text-4xl">bakery_dining</span>
+                        </div>
+                      )}
+                      <span className="absolute left-3 top-3 rounded-full bg-primary-fixed px-3 py-1 font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary-container shadow-sm">
                         {producto.tipo}
                       </span>
                     </div>
-                    <div className="p-6 flex flex-col flex-1 justify-between">
+                    <div className="flex flex-1 flex-col justify-between p-4">
                       <div>
-                        <h3 className="font-headline-md text-headline-md text-primary font-bold uppercase leading-snug">{producto.nombre}</h3>
-                        <p className="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+                        <h3 className="font-headline-md text-lg text-primary font-bold uppercase leading-snug">{producto.nombre}</h3>
+                        <p className="font-body-md text-sm text-on-surface-variant mt-1.5 leading-relaxed">
                           {producto.tipo === 'Dulce'
                             ? 'Mini tortas, alfajores, brownies, frutas con chocolate y postrecitos en vasito.'
                             : producto.tipo === 'Salado'
@@ -378,11 +453,11 @@ function Pagina() {
                               : 'Carne cortada a cuchillo, jamón y queso o pollo, con masa hojaldrada casera.'}
                         </p>
                       </div>
-                      <div className="mt-6 pt-4 flex items-center justify-between border-t-0">
-                        <span className="font-headline-md text-headline-md text-primary-container font-bold">{producto.precio}</span>
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 pt-2">
+                        <span className="font-headline-md text-lg text-primary-container font-bold">{producto.precio}</span>
                         <button
                           type="button"
-                          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-md text-label-md uppercase tracking-wider shadow-sm hover:shadow-md transition-all"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-4 py-2 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm transition-all hover:shadow-md"
                           onClick={() => agregarAlCarrito(producto)}
                         >
                           <span className="material-symbols-outlined text-[18px]" aria-hidden="true">add_shopping_cart</span>
@@ -393,103 +468,205 @@ function Pagina() {
                   </div>
                 ))}
               </div>
+              {productosFiltrados.length === 0 && (
+                <p className="mt-8 text-center font-body-md text-on-surface-variant" role="status">
+                  Todavía no hay productos disponibles en {categoriaSeleccionada.toLowerCase()}.
+                </p>
+              )}
             </div>
           </section>
 
-          <section className="relative w-full bg-primary-fixed/30 py-20 overflow-hidden" id="como-pedir">
-            <div className="w-full absolute top-0 left-0 right-0 leading-none pointer-events-none transform rotate-180">
-              <svg className="w-full h-10 text-surface-container-lowest fill-current" fill="none" viewBox="0 0 1440 60">
-                <path d="M0,20 C360,50 720,0 1080,30 C1260,45 1380,10 1440,25 L1440,60 L0,60 Z" />
-              </svg>
-            </div>
-            <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10 pt-4">
-              <div className="text-center max-w-xl mx-auto mb-14">
+          <section className="relative w-full scroll-mt-24 border-b border-primary-fixed bg-primary-fixed/30 py-12 overflow-hidden lg:py-20" id="como-pedir">
+            <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10">
+              <div className="text-center max-w-xl mx-auto mb-8 lg:mb-14">
                 <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary-container uppercase font-bold tracking-tight">
                   ARMAR TU MESA ES FÁCIL
                 </h2>
                 <p className="font-body-md text-body-md text-on-surface-variant mt-2 font-medium">
-                  En cuatro pasos tenés todo listo para tu evento
+                  Completá el formulario y te respondemos por WhatsApp con una propuesta a medida
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                <div className="lg:col-span-3 flex flex-col gap-8 order-2 lg:order-1">
-                  <div className="flex flex-col items-center lg:items-end text-center lg:text-right p-5 rounded-2xl bg-surface-container-lowest/80 backdrop-blur shadow-sm">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary flex items-center justify-center font-headline-sm font-bold shadow-[0_4px_16px_rgba(229,18,79,0.35)] mb-3">1</div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary uppercase font-bold">1. Contanos tu evento</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant mt-1">Fecha, lugar y cantidad de agasajados.</p>
+              <div className="mx-auto w-full max-w-4xl lg:max-w-none">
+                <ol className="mb-7 grid grid-cols-2 gap-x-4 gap-y-5 sm:gap-5 lg:hidden" aria-label="Pasos para armar tu mesa">
+                  {pasosPedido.map((paso, indice) => (
+                    <li key={paso.titulo} className="flex min-w-0 items-start gap-2.5">
+                      <span className="grid h-8 w-8 flex-none place-items-center rounded-full bg-primary text-sm font-bold text-on-primary">{indice + 1}</span>
+                      <div className="min-w-0 pt-0.5">
+                        <h3 className="text-sm font-bold leading-snug text-primary">{paso.titulo}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-on-surface-variant">{paso.descripcion}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+
+                <div className="grid grid-cols-1 gap-space-lg lg:grid-cols-12 lg:items-center">
+                  <div className="hidden flex-col gap-8 lg:col-span-3 lg:order-1 lg:flex">
+                    {pasosPedido.slice(0, 2).map((paso, indice) => (
+                      <div
+                        key={paso.titulo}
+                        className={`flex flex-col items-center p-5 text-center lg:items-end lg:text-right ${
+                          indice === 0
+                            ? 'rounded-2xl bg-surface-container-lowest/80 shadow-sm backdrop-blur'
+                            : 'rounded-2xl bg-surface-container-lowest/50'
+                        }`}
+                      >
+                        <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full font-headline-sm font-bold ${
+                          indice === 0
+                            ? 'bg-gradient-to-r from-secondary-container to-secondary text-on-secondary shadow-[0_4px_16px_rgba(229,18,79,0.35)]'
+                            : 'bg-surface-container-lowest text-primary-container shadow-sm'
+                        }`}>{indice + 1}</div>
+                        <h4 className="font-headline-sm text-headline-sm font-bold uppercase text-primary">{indice + 1}. {paso.titulo}</h4>
+                        <p className="mt-1 font-body-md text-body-md text-on-surface-variant">{paso.descripcion}</p>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="flex flex-col items-center lg:items-end text-center lg:text-right p-5 rounded-2xl bg-surface-container-lowest/50">
-                    <div className="w-12 h-12 rounded-full bg-surface-container-lowest text-primary-container flex items-center justify-center font-headline-sm font-bold shadow-sm mb-3">2</div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary uppercase font-bold">2. Elegí tu menú</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant mt-1">Combiná opciones dulces y saladas.</p>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-6 flex justify-center order-1 lg:order-2">
-                  <div className="relative w-full max-w-md">
-                    <div className="rounded-3xl overflow-hidden shadow-[0_20px_40px_-8px_rgba(138,11,61,0.18)] bg-surface-container-lowest">
-                      <img
-                        alt="Mesa de varios pisos con mini cakes, alfajores y macarons para eventos"
-                        className="w-full h-80 sm:h-96 object-cover"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBuzR50vRBViucR6ZEl0eScTa2zYI-M7e8kAH6yRQIDV3ecVQ9P-C--bnCwUxme0OoBdY501dcX5iYWPcNpPxS6leL2uNGr6oXkSSapucRc0Z7GdlsjwlvbLlH-jm23IEesbU1I7Vg7YtByhHq20eLC30yKzq3CBFhb6jNVdnXo1WuXopX7SNH6L1A2hx4YtKh0Zu3mDicki_qzIOC-BvMtDrNT6KNlT0TeJKJ_o6FmxAF4wrjUlFpRQ"
-                      />
+                  <div className="flex justify-center lg:col-span-6 lg:order-2">
+                  <form
+                    id="formulario-mesa"
+                    className="w-full scroll-mt-24 max-w-md rounded-3xl bg-surface-container-lowest p-6 shadow-[0_20px_40px_-8px_rgba(138,11,61,0.18)] sm:p-8"
+                    onSubmit={enviarFormularioMesa}
+                  >
+                    <div className="mb-6">
+                      <span className="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Presupuesto personalizado</span>
+                      <h3 className="mt-1 font-headline-md text-headline-md text-primary uppercase font-bold">Contanos sobre tu evento</h3>
                     </div>
-                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-surface-container-lowest/95 backdrop-blur px-5 py-2 rounded-full shadow-md text-center whitespace-nowrap">
-                      <span className="font-script text-2xl text-primary-container">Hecho con dedicación</span>
+
+                    <div className="flex flex-col gap-5">
+                      <label className="flex flex-col gap-2" htmlFor="cantidad-invitados">
+                        <span className="font-label-md text-label-md font-bold text-primary">Cantidad de invitados</span>
+                        <input
+                          id="cantidad-invitados"
+                          className="rounded-xl border border-primary-fixed bg-surface-container-low px-4 py-3 text-primary outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                          min="1"
+                          name="cantidadInvitados"
+                          onChange={(evento) => establecerCantidadInvitados(evento.target.value)}
+                          placeholder="Ej: 30"
+                          required
+                          type="number"
+                          value={cantidadInvitados}
+                        />
+                      </label>
+
+                      <label className="flex flex-col gap-2" htmlFor="tipo-evento">
+                        <span className="font-label-md text-label-md font-bold text-primary">Tipo de evento</span>
+                        <select
+                          id="tipo-evento"
+                          className="rounded-xl border border-primary-fixed bg-surface-container-low px-4 py-3 text-primary outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                          name="tipoEvento"
+                          onChange={(evento) => establecerTipoEvento(evento.target.value)}
+                          required
+                          value={tipoEvento}
+                        >
+                          <option value="" disabled>Elegí una opción</option>
+                          <option value="Cumpleaños">Cumpleaños</option>
+                          <option value="Baby Shower">Baby Shower</option>
+                          <option value="Reunión familiar">Reunión familiar</option>
+                          <option value="Casamiento">Casamiento</option>
+                          <option value="Evento corporativo">Evento corporativo</option>
+                          <option value="Otro evento">Otro evento</option>
+                        </select>
+                      </label>
+
+                      <fieldset>
+                        <legend className="mb-2 font-label-md text-label-md font-bold text-primary">¿Qué mesas querés elegir?</legend>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                          {[
+                            { nombre: 'Mesa dulce', descripcion: 'Tortas, postres y cosas ricas.' },
+                            { nombre: 'Mesa salada', descripcion: 'Variedad de empanadas, pizzetas y bocaditos.' },
+                          ].map((mesa) => {
+                            const seleccionada = mesasElegidas.includes(mesa.nombre)
+                            return (
+                              <button
+                                key={mesa.nombre}
+                                aria-pressed={seleccionada}
+                                className={`rounded-2xl border p-4 text-left transition ${
+                                  seleccionada
+                                    ? 'border-secondary bg-primary-fixed text-primary shadow-sm'
+                                    : 'border-primary-fixed bg-surface-container-low text-on-surface-variant hover:border-secondary/50'
+                                }`}
+                                onClick={() => alternarMesa(mesa.nombre)}
+                                type="button"
+                              >
+                                <span className="flex items-center justify-between gap-2 font-label-md font-bold text-primary">
+                                  {mesa.nombre}
+                                  <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
+                                    {seleccionada ? 'check_circle' : 'add_circle'}
+                                  </span>
+                                </span>
+                                <span className="mt-1 block text-xs leading-relaxed text-on-surface-variant">{mesa.descripcion}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </fieldset>
                     </div>
-                  </div>
-                </div>
 
-                <div className="lg:col-span-3 flex flex-col gap-8 order-3">
-                  <div className="flex flex-col items-center lg:items-start text-center lg:text-left p-5 rounded-2xl bg-surface-container-lowest/50">
-                    <div className="w-12 h-12 rounded-full bg-surface-container-lowest text-primary-container flex items-center justify-center font-headline-sm font-bold shadow-sm mb-3">3</div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary uppercase font-bold">3. Recibí tu presupuesto</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant mt-1">Detalle claro y personalizado por WhatsApp.</p>
-                  </div>
+                    {errorFormularioMesa && (
+                      <p className="mt-4 text-sm font-semibold text-secondary" role="alert">{errorFormularioMesa}</p>
+                    )}
 
-                  <div className="flex flex-col items-center lg:items-start text-center lg:text-left p-5 rounded-2xl bg-surface-container-lowest/50">
-                    <div className="w-12 h-12 rounded-full bg-surface-container-lowest text-primary-container flex items-center justify-center font-headline-sm font-bold shadow-sm mb-3">4</div>
-                    <h4 className="font-headline-sm text-headline-sm text-primary uppercase font-bold">4. Retirá o recibí en tu casa</h4>
-                    <p className="font-body-md text-body-md text-on-surface-variant mt-1">Llega todo fresco y listo para presentar.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="w-full bg-surface-container-lowest py-16 md:py-24">
-            <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin">
-              <div className="relative overflow-hidden rounded-3xl bg-primary-fixed/40 p-8 sm:p-12 md:p-16 text-center shadow-[0_12px_32px_-4px_rgba(138,11,61,0.08)]">
-                <div className="absolute -top-24 -left-24 w-64 h-64 bg-secondary-container/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-tertiary-fixed/30 rounded-full blur-3xl pointer-events-none" />
-                <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center gap-space-sm">
-                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-surface-container-lowest text-secondary shadow-sm">
-                    <span className="material-symbols-outlined text-[16px]">schedule</span>
-                    <span className="font-label-sm text-label-sm font-bold tracking-wide">Respondemos en menos de 1 hora</span>
-                  </div>
-                  <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary uppercase font-bold tracking-tight">
-                    ¿TENÉS UN EVENTO EN MENTE?
-                  </h2>
-                  <p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
-                    Escribinos por WhatsApp y Loli te arma un presupuesto sin compromiso
-                  </p>
-                  <div className="mt-4">
-                    <a
-                      className="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-lg text-label-lg uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
-                      href={enlaceWhatsApp}
-                      rel="noopener noreferrer"
-                      target="_blank"
+                    <button
+                      className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-5 py-3.5 font-label-md text-label-md font-bold uppercase tracking-wider text-on-secondary shadow-md transition hover:shadow-lg"
+                      type="submit"
                     >
-                      <span className="material-symbols-outlined text-[20px]">chat</span>
-                      Hablar por WhatsApp
-                    </a>
+                      <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chat</span>
+                      Enviar por WhatsApp
+                    </button>
+                  </form>
                   </div>
+
+                  <div className="hidden flex-col gap-8 lg:col-span-3 lg:order-3 lg:flex">
+                    {pasosPedido.slice(2).map((paso, indice) => (
+                      <div key={paso.titulo} className="flex flex-col items-center rounded-2xl bg-surface-container-lowest/50 p-5 text-center lg:items-start lg:text-left">
+                        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-surface-container-lowest font-headline-sm font-bold text-primary-container shadow-sm">{indice + 3}</div>
+                        <h4 className="font-headline-sm text-headline-sm font-bold uppercase text-primary">{indice + 3}. {paso.titulo}</h4>
+                        <p className="mt-1 font-body-md text-body-md text-on-surface-variant">{paso.descripcion}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                <div className="mx-auto mb-6 max-w-xl text-center">
+                  <span className="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Inspiración</span>
+                  <h3 className="mt-1 font-headline-md text-headline-md text-primary uppercase font-bold">Mirá nuestras mesas</h3>
+                  <p className="mt-1 font-body-sm text-on-surface-variant">Una muestra de las opciones que podemos preparar para tu evento.</p>
+                </div>
+                <div className="relative mx-auto max-w-6xl">
+                  <button
+                    type="button"
+                    className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-surface-container-lowest/95 text-primary transition hover:bg-primary hover:text-on-primary"
+                    aria-label="Ver muestras anteriores"
+                    onClick={() => desplazarMuestras(-1)}
+                  >
+                    <span className="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+                  </button>
+                  <div ref={muestrasMesasRef} className="flex gap-5 overflow-x-auto px-2 pb-3 scroll-smooth">
+                  {muestrasMesas.map((mesa) => (
+                    <figure key={mesa.nombre} className="group relative aspect-video w-[230px] flex-none overflow-hidden rounded-2xl bg-surface-container-low sm:w-[280px]">
+                      <img className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src={mesa.imagen} alt={mesa.nombre} />
+                      <figcaption className="absolute inset-x-4 bottom-4 rounded-full bg-surface-container-lowest/95 px-4 py-3 text-center font-label-sm text-label-sm font-bold text-primary">
+                        {mesa.tipo}
+                      </figcaption>
+                    </figure>
+                  ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-surface-container-lowest/95 text-primary transition hover:bg-primary hover:text-on-primary"
+                    aria-label="Ver más muestras"
+                    onClick={() => desplazarMuestras(1)}
+                  >
+                    <span className="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                  </button>
                 </div>
               </div>
             </div>
           </section>
+
         </div>
       </main>
 
