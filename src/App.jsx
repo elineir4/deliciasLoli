@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import heroAnimated from './assets/heroanimado2-Photoroom.png'
+import imagenHero from './assets/heroanimado3-Photoroom.png'
 
-const menuLinks = [
+const enlacesMenu = [
   'Mesas dulces',
   'Mesas saladas',
   'Comidas',
@@ -10,104 +10,144 @@ const menuLinks = [
   'Contacto',
 ]
 
-const benefits = [
+const beneficios = [
   {
-    icon: 'cookie',
-    title: 'Todo casero y hecho a pedido',
-    text: 'Ingredientes de primera calidad, sin conservantes y horneado en el día para garantizar sabor inigualable.',
+    icono: 'cookie',
+    titulo: 'Todo casero y hecho a pedido',
+    descripcion: 'Ingredientes de primera calidad, sin conservantes y horneado en el día para garantizar sabor inigualable.',
   },
   {
-    icon: 'dinner_dining',
-    title: 'Mesas armadas según invitados',
-    text: 'Cálculo exacto de porciones dulces y saladas para que tu festejo sea perfecto y nadie se quede con ganas.',
+    icono: 'dinner_dining',
+    titulo: 'Mesas armadas según invitados',
+    descripcion: 'Cálculo exacto de porciones dulces y saladas para que tu festejo sea perfecto y nadie se quede con ganas.',
   },
   {
-    icon: 'local_shipping',
-    title: 'Entrega a domicilio y retiro',
-    text: 'Coordinamos el horario exacto para que todo llegue impecable, fresco y listo para servir en tu evento.',
+    icono: 'local_shipping',
+    titulo: 'Entrega a domicilio y retiro',
+    descripcion: 'Coordinamos el horario exacto para que todo llegue impecable, fresco y listo para servir en tu evento.',
   },
 ]
 
-const products = [
+const productos = [
   {
-    title: 'Mesa dulce clásica (para 20 personas)',
-    type: 'Dulce',
-    price: '$45.000',
-    image:
+    nombre: 'Mesa dulce clásica (para 20 personas)',
+    tipo: 'Dulce',
+    precio: '$45.000',
+    imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAn6lwwviX4UNHI7rF4y9WmJVpMSkvSn_HlDeFlSUD14BTKT7H5Doncq6ub2gC1NfBWsAnRElOj9o8_K4wL3NKBhZhHPUFUvV3b4DMlPGEhGCOcDpjWb8NrQgEhfE__OFIzXG6cB4XTwyOjYwqqgBwr0CpdSMugeOWWWq6CXPhJKuYbDEauvDmz_rVScPOtfVWp9e7oZBOim363FdX1cNCieznV4w8ko-pkjnH6zNpdERD0hPa8l4tfKA',
   },
   {
-    title: 'Mesa salada completa (para 20 personas)',
-    type: 'Salado',
-    price: '$52.000',
-    image:
+    nombre: 'Mesa salada completa (para 20 personas)',
+    tipo: 'Salado',
+    precio: '$52.000',
+    imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCui5RBt-J0VHmu4-dBdxEMyp9UU4_ErBbjlHPhewHZVjbbHOc3MKcWFe0oDfivCAHUpgWpNHgC3vDNjZ0xnef_KRb46_WCM7upK6qvpvmOa9HmxcL0Bvv0sq8wtt_9Fjk8RQewYDEKDUY_yUh9yfr76x7-04C_HmbUui3FKOujgFIzOXT6rL0sE5wKmsr7ufEmYUhs-1E_JuhtaEYzCsW13SsTPo1dSMXWiqgB7th0lRkw9kNvYj4JyQ',
   },
   {
-    title: 'Docena de empanadas caseras',
-    type: 'Salado',
-    price: '$16.000',
-    image:
+    nombre: 'Docena de empanadas caseras',
+    tipo: 'Salado',
+    precio: '$16.000',
+    imagen:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAHUNWXsJgLwtiOnmQbjzsS3vKBbxVgh4tZ9PLpDJZMB9uPFFRjum3CkGkwOPxq96D94UJKBdbWoFqtnSXbYPSSUvnV48zRP9kj3IbCU_wwi76z3WLOQTrnVrVXIUkThihU0fdG1nyCj9_i4GLXDBVHQmsrW0jAreU_FQIAEwTGeGMY_9nD6rchy4GfvRzBabfYJtkm8MoYrdpwAXZoUhcx3PdOf2hNAFENZ999jZGLH8V5p-suuQnGcw',
   },
 ]
 
-function App() {
-  const [selectedZone, setSelectedZone] = useState('Córdoba Capital')
+const zonasEntrega = ['Córdoba Capital', 'Villa Allende', 'La Calera', 'Mendiolaza', 'Unquillo']
 
-  const whatsappMessage = `Hola Loli! Soy de ${selectedZone} y me gustaría consultar sobre mi evento.`
-  const whatsappHref = `https://wa.me/543515290303?text=${encodeURIComponent(whatsappMessage)}`
+function Pagina() {
+  const [zonaElegida, establecerZonaElegida] = useState('Córdoba Capital')
+  const [selectorZonaAbierto, establecerSelectorZonaAbierto] = useState(false)
+  const [carrito, establecerCarrito] = useState([])
+  const [carritoAbierto, establecerCarritoAbierto] = useState(false)
+
+  const mensajeWhatsApp = `Hola Delicias Loli! Soy de ${zonaElegida} y me gustaría consultar sobre:.`
+  const enlaceWhatsApp = `https://wa.me/543515290303?text=${encodeURIComponent(mensajeWhatsApp)}`
+  const cantidadEnCarrito = carrito.reduce((cantidad, producto) => cantidad + producto.cantidad, 0)
+  const subtotalCarrito = carrito.reduce(
+    (subtotal, producto) => subtotal + Number(producto.precio.replace(/\D/g, '')) * producto.cantidad,
+    0,
+  )
+  const formatearPrecio = (precio) =>
+    new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(precio)
+  const mensajePedido = [
+    `Hola Delicias Loli! Quiero hacer este pedido para ${zonaElegida}:`,
+    ...carrito.map((producto) => `- ${producto.cantidad} x ${producto.nombre} (${producto.precio})`),
+    `Total estimado: ${formatearPrecio(subtotalCarrito)}`,
+  ].join('\n')
+  const enlacePedidoWhatsApp = `https://wa.me/543515290303?text=${encodeURIComponent(mensajePedido)}`
+
+  function agregarAlCarrito(producto) {
+    establecerCarrito((carritoActual) => {
+      const productoEnCarrito = carritoActual.find((item) => item.nombre === producto.nombre)
+      if (productoEnCarrito) {
+        return carritoActual.map((item) =>
+          item.nombre === producto.nombre ? { ...item, cantidad: item.cantidad + 1 } : item,
+        )
+      }
+      return [...carritoActual, { ...producto, cantidad: 1 }]
+    })
+  }
+
+  function cambiarCantidad(nombre, cambio) {
+    establecerCarrito((carritoActual) =>
+      carritoActual
+        .map((producto) =>
+          producto.nombre === nombre ? { ...producto, cantidad: producto.cantidad + cambio } : producto,
+        )
+        .filter((producto) => producto.cantidad > 0),
+    )
+  }
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (prefersReducedMotion.matches) return
+    const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (movimientoReducido.matches) return
 
-    const hero = document.getElementById('hero-section')
-    const cakeWrapper = document.getElementById('parallax-cake-wrapper')
-    const parallaxItems = document.querySelectorAll('.parallax-item')
-    if (!hero || !cakeWrapper) return
+    const seccionHero = document.getElementById('hero-section')
+    const contenedorTorta = document.getElementById('parallax-cake-wrapper')
+    const elementosParallax = document.querySelectorAll('.parallax-item')
+    if (!seccionHero || !contenedorTorta) return
 
-    let targetX = 0
-    let targetY = 0
-    let currentX = 0
-    let currentY = 0
+    let objetivoX = 0
+    let objetivoY = 0
+    let actualX = 0
+    let actualY = 0
 
-    hero.addEventListener('mousemove', (event) => {
-      const rect = hero.getBoundingClientRect()
-      const x = (event.clientX - rect.left) / rect.width - 0.5
-      const y = (event.clientY - rect.top) / rect.height - 0.5
-      targetX = x
-      targetY = y
+    seccionHero.addEventListener('mousemove', (evento) => {
+      const limites = seccionHero.getBoundingClientRect()
+      const posicionX = (evento.clientX - limites.left) / limites.width - 0.5
+      const posicionY = (evento.clientY - limites.top) / limites.height - 0.5
+      objetivoX = posicionX
+      objetivoY = posicionY
     })
 
-    hero.addEventListener('mouseleave', () => {
-      targetX = 0
-      targetY = 0
+    seccionHero.addEventListener('mouseleave', () => {
+      objetivoX = 0
+      objetivoY = 0
     })
 
-    function updateParallax() {
-      currentX += (targetX - currentX) * 0.08
-      currentY += (targetY - currentY) * 0.08
+    function actualizarParallax() {
+      actualX += (objetivoX - actualX) * 0.08
+      actualY += (objetivoY - actualY) * 0.08
 
-      const cakeTiltX = -currentY * 12
-      const cakeTiltY = currentX * 14
-      const cakeTransX = currentX * 18
-      const cakeTransY = currentY * 14
+      const inclinacionTortaX = -actualY * 12
+      const inclinacionTortaY = actualX * 14
+      const desplazamientoTortaX = actualX * 18
+      const desplazamientoTortaY = actualY * 14
 
-      cakeWrapper.style.transform = `translate3d(${cakeTransX}px, ${cakeTransY}px, 0) rotateX(${cakeTiltX}deg) rotateY(${cakeTiltY}deg)`
+      contenedorTorta.style.transform = `translate3d(${desplazamientoTortaX}px, ${desplazamientoTortaY}px, 0) rotateX(${inclinacionTortaX}deg) rotateY(${inclinacionTortaY}deg)`
 
-      parallaxItems.forEach((item) => {
-        const speed = Number(item.getAttribute('data-parallax-speed') || 0.04)
-        const itemX = currentX * 100 * speed
-        const itemY = currentY * 100 * speed
-        item.style.transform = `translate3d(${itemX}px, ${itemY}px, 0)`
+      elementosParallax.forEach((elemento) => {
+        const velocidad = Number(elemento.getAttribute('data-parallax-speed') || 0.04)
+        const desplazamientoX = actualX * 100 * velocidad
+        const desplazamientoY = actualY * 100 * velocidad
+        elemento.style.transform = `translate3d(${desplazamientoX}px, ${desplazamientoY}px, 0)`
       })
 
-      requestAnimationFrame(updateParallax)
+      requestAnimationFrame(actualizarParallax)
     }
 
-    const frameId = requestAnimationFrame(updateParallax)
-    return () => cancelAnimationFrame(frameId)
+    const idAnimacion = requestAnimationFrame(actualizarParallax)
+    return () => cancelAnimationFrame(idAnimacion)
   }, [])
 
   return (
@@ -127,26 +167,39 @@ function App() {
           </div>
 
           <nav className="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-semibold">
-            {menuLinks.map((link) => (
+            {enlacesMenu.map((enlace) => (
               <a
-                key={link}
+                key={enlace}
                 className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap"
                 href="#"
               >
-                {link}
+                {enlace}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-space-sm shrink-0">
+            <button
+              type="button"
+              className="relative inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary-fixed text-primary-container transition-colors hover:bg-primary-fixed/70"
+              aria-label={`Abrir carrito, ${cantidadEnCarrito} productos`}
+              onClick={() => establecerCarritoAbierto(true)}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+              {cantidadEnCarrito > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1 text-[11px] font-bold text-on-secondary">
+                  {cantidadEnCarrito}
+                </span>
+              )}
+            </button>
             <a
               className="inline-flex items-center gap-2 px-space-md py-2.5 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-md text-label-md uppercase tracking-wider shadow-[0_4px_12px_rgba(229,18,79,0.18)] hover:shadow-lg transition-all shrink-0"
-              href={whatsappHref}
+              href={enlaceWhatsApp}
               rel="noopener noreferrer"
               target="_blank"
             >
               <span className="material-symbols-outlined text-[18px]">chat</span>
-              Hablar por WhatsApp
+              <span className="hidden sm:inline">Hablar por WhatsApp</span>
             </a>
           </div>
         </div>
@@ -155,40 +208,47 @@ function App() {
       <main className="w-full pt-20 bg-background">
         <div className="flex flex-col w-full">
           <section className="relative w-full bg-primary-fixed/30 overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24" id="hero-section">
-            <div className="absolute top-10 left-6 pointer-events-none opacity-40 select-none animate-pulse">
-              <svg fill="none" height="42" viewBox="0 0 42 42" width="42">
-                <path d="M12 28C8 22 10 12 18 10C26 8 30 16 28 24C26 32 16 34 12 28Z" fill="#ad2b55" fillOpacity="0.3" />
-                <path d="M18 10C16 18 20 22 28 24" stroke="#630029" strokeLinecap="round" strokeWidth="1.5" />
-              </svg>
-            </div>
-            <div className="absolute top-1/3 right-4 pointer-events-none opacity-30 select-none blur-[1px]">
-              <svg fill="none" height="56" viewBox="0 0 56 56" width="56">
-                <circle cx="28" cy="28" fill="#b9003c" fillOpacity="0.4" r="14" />
-                <circle cx="22" cy="22" fill="#e5124f" fillOpacity="0.5" r="8" />
-                <circle cx="34" cy="22" fill="#e5124f" fillOpacity="0.5" r="8" />
-                <circle cx="28" cy="36" fill="#8a0b3d" fillOpacity="0.5" r="9" />
-              </svg>
-            </div>
-
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-                <div className="lg:col-span-7 flex flex-col gap-space-sm items-start text-left">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md shadow-sm">
-                    <span className="material-symbols-outlined text-secondary text-[18px]">location_on</span>
-                    <span className="font-label-md text-label-md text-secondary font-bold tracking-wide">Elegí tu zona de entrega:</span>
-                    <div className="relative inline-block">
-                      <select
-                        className="appearance-none bg-transparent pr-6 font-label-md text-label-md text-primary font-bold focus:outline-none cursor-pointer"
-                        value={selectedZone}
-                        onChange={(event) => setSelectedZone(event.target.value)}
+                <div className="lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda">
+                  <div className="zona-entrega-selector">
+                    <span className="zona-entrega-selector__icon material-symbols-outlined" aria-hidden="true">location_on</span>
+                    <div className="zona-entrega-selector__copy">
+                      <span className="zona-entrega-selector__eyebrow">Entrega</span>
+                      <span className="zona-entrega-selector__label">Elegí tu zona</span>
+                    </div>
+                    <div className="zona-entrega-selector__control">
+                      <button
+                        type="button"
+                        className="zona-entrega-selector__trigger"
+                        aria-expanded={selectorZonaAbierto}
+                        aria-haspopup="listbox"
+                        onClick={() => establecerSelectorZonaAbierto(!selectorZonaAbierto)}
                       >
-                        <option value="Córdoba Capital">Córdoba Capital</option>
-                        <option value="Villa Allende">Villa Allende</option>
-                        <option value="Villa Carlos Paz">Villa Carlos Paz</option>
-                        <option value="Alta Gracia">Alta Gracia</option>
-                        <option value="La Calera">La Calera</option>
-                      </select>
-                      <span className="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[16px]">expand_more</span>
+                        {zonaElegida}
+                        <span className="zona-entrega-selector__arrow material-symbols-outlined" aria-hidden="true">expand_more</span>
+                      </button>
+                      {selectorZonaAbierto && (
+                        <div className="zona-entrega-selector__menu" role="listbox" aria-label="Zonas de entrega">
+                          {zonasEntrega.map((zona) => (
+                            <button
+                              key={zona}
+                              type="button"
+                              className={`zona-entrega-selector__option${zona === zonaElegida ? ' is-selected' : ''}`}
+                              role="option"
+                              aria-selected={zona === zonaElegida}
+                              onClick={() => {
+                                establecerZonaElegida(zona)
+                                establecerSelectorZonaAbierto(false)
+                              }}
+                            >
+                              <span className="zona-entrega-selector__option-icon material-symbols-outlined" aria-hidden="true">location_on</span>
+                              <span className="zona-entrega-selector__option-copy"><strong>{zona}</strong></span>
+                              {zona === zonaElegida && <span className="zona-entrega-selector__check material-symbols-outlined" aria-hidden="true">check</span>}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -206,7 +266,7 @@ function App() {
                     </a>
                     <a
                       className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-surface-container-lowest text-primary-container font-label-lg text-label-lg uppercase tracking-wider shadow-sm hover:bg-primary-container hover:text-on-primary transition-all duration-300"
-                      href={whatsappHref}
+                      href={enlaceWhatsApp}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -226,7 +286,7 @@ function App() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-5 relative mt-8 lg:mt-0 flex items-center justify-center min-h-[420px] lg:min-h-[480px]">
+                <div className="lg:col-span-5 relative mt-8 lg:mt-0 flex items-center justify-center min-h-[420px] lg:min-h-[480px] animar-entrada-derecha">
                   <div className="relative w-full max-w-[430px] flex flex-col items-center justify-center select-none" id="cake-interactive-stage">
                     <div className="absolute bottom-2 w-[74%] h-12 rounded-[50%] blur-md anim-cake-shadow pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(138, 11, 61, 0.22) 0%, rgba(138, 11, 61, 0.08) 45%, transparent 75%)' }} />
                     <div className="relative w-full flex items-center justify-center transition-transform duration-200 ease-out z-10" id="parallax-cake-wrapper">
@@ -235,66 +295,11 @@ function App() {
                           alt="Pastel artesanal con crema chantilly, fresas frescas y frambuesas"
                           className="w-full max-w-[390px] lg:max-w-[420px] h-auto object-contain pointer-events-none transition-transform duration-300 ease-out"
                           id="hero-floating-cake"
-                          src={heroAnimated}
+                          src={imagenHero}
                         />
                       </div>
                     </div>
 
-                    <div className="parallax-item anim-float-slow absolute -top-4 left-6 pointer-events-none transition-transform duration-200 ease-out drop-shadow-md z-20" data-parallax-speed="0.04">
-                      <svg fill="none" height="38" viewBox="0 0 34 38" width="34" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="17" cy="18" fill="#b9003c" r="13" />
-                        <circle cx="12" cy="13" fill="#e5124f" r="5" />
-                        <circle cx="21" cy="13" fill="#e5124f" r="5" />
-                        <circle cx="11" cy="21" fill="#e5124f" r="5" />
-                        <circle cx="21" cy="21" fill="#e5124f" r="5" />
-                        <circle cx="16" cy="27" fill="#8a0b3d" r="4.5" />
-                        <circle cx="17" cy="17" fill="#ffb1c1" fillOpacity="0.6" r="4" />
-                        <path d="M17 5C17 2 19 1 19 1" stroke="#2d6a4f" strokeLinecap="round" strokeWidth="2" />
-                        <path d="M15 6C13 4 11 5 11 5" stroke="#40916c" strokeLinecap="round" strokeWidth="2" />
-                        <path d="M19 6C22 5 23 7 23 7" stroke="#40916c" strokeLinecap="round" strokeWidth="2" />
-                      </svg>
-                    </div>
-
-                    <div className="parallax-item anim-float-medium absolute top-4 -right-5 pointer-events-none transition-transform duration-200 ease-out drop-shadow-sm z-20" data-parallax-speed="0.06">
-                      <svg fill="none" height="36" viewBox="0 0 40 36" width="40" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 28C14 26 28 22 34 8C26 6 12 10 6 22C4 26 6 28 8 28Z" fill="#52b788" />
-                        <path d="M8 28C14 26 28 22 34 8" stroke="#2d6a4f" strokeLinecap="round" strokeWidth="1.5" />
-                        <path d="M18 20L22 17M14 23L16 21M24 16L27 13" stroke="#2d6a4f" strokeLinecap="round" strokeWidth="1.2" />
-                      </svg>
-                    </div>
-
-                    <div className="parallax-item anim-float-fast absolute bottom-10 -right-4 pointer-events-none transition-transform duration-200 ease-out drop-shadow-md z-20" data-parallax-speed="-0.05">
-                      <svg fill="none" height="32" viewBox="0 0 28 32" width="28" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="14" cy="16" fill="#b9003c" r="11" />
-                        <circle cx="10" cy="12" fill="#e5124f" r="4.2" />
-                        <circle cx="18" cy="12" fill="#e5124f" r="4.2" />
-                        <circle cx="9" cy="19" fill="#8a0b3d" r="4" />
-                        <circle cx="18" cy="19" fill="#8a0b3d" r="4" />
-                        <circle cx="14" cy="23" fill="#630029" r="3.5" />
-                        <circle cx="14" cy="15" fill="#ffdadb" fillOpacity="0.6" r="3" />
-                      </svg>
-                    </div>
-
-                    <div className="parallax-item anim-float-slow absolute bottom-6 -left-3 pointer-events-none transition-transform duration-200 ease-out drop-shadow-sm z-20" data-parallax-speed="-0.03">
-                      <svg className="transform -rotate-45" fill="none" height="30" viewBox="0 0 32 30" width="32" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 24C12 22 22 16 26 6C18 5 9 10 5 19C4 22 5 24 6 24Z" fill="#74c69d" />
-                        <path d="M6 24C12 22 22 16 26 6" stroke="#2d6a4f" strokeLinecap="round" strokeWidth="1.4" />
-                        <path d="M14 17L17 15M10 20L12 18" stroke="#2d6a4f" strokeLinecap="round" strokeWidth="1.0" />
-                      </svg>
-                    </div>
-
-                    <div className="parallax-item anim-float-medium absolute top-1/2 -left-8 pointer-events-none transition-transform duration-200 ease-out drop-shadow-md z-20" data-parallax-speed="0.05">
-                      <svg className="transform rotate-12" fill="none" height="30" viewBox="0 0 26 30" width="26" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 28C6 24 3 17 4 10C5 6 9 5 13 5C17 5 21 6 22 10C23 17 20 24 13 28Z" fill="#d90429" />
-                        <circle cx="9" cy="12" fill="#ffea00" r="0.9" />
-                        <circle cx="15" cy="11" fill="#ffea00" r="0.9" />
-                        <circle cx="12" cy="16" fill="#ffea00" r="0.9" />
-                        <circle cx="17" cy="18" fill="#ffea00" r="0.9" />
-                        <circle cx="9" cy="20" fill="#ffea00" r="0.9" />
-                        <circle cx="13" cy="23" fill="#ffea00" r="0.9" />
-                        <path d="M13 2V6M9 4L13 6M17 4L13 6" stroke="#40916c" strokeLinecap="round" strokeWidth="1.8" />
-                      </svg>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -310,13 +315,13 @@ function App() {
           <section className="w-full bg-surface-container-lowest py-12 md:py-16">
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-                {benefits.map((benefit) => (
-                  <div key={benefit.title} className="flex flex-col items-center text-center p-6 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-low transition-colors duration-300">
+                {beneficios.map((beneficio) => (
+                  <div key={beneficio.titulo} className="flex flex-col items-center text-center p-6 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-low transition-colors duration-300">
                     <div className="w-16 h-16 rounded-full bg-primary-fixed/50 flex items-center justify-center text-secondary mb-4 shadow-sm">
-                      <span className="material-symbols-outlined text-[32px]">{benefit.icon}</span>
+                      <span className="material-symbols-outlined text-[32px]">{beneficio.icono}</span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary uppercase font-bold mb-2">{benefit.title}</h3>
-                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">{benefit.text}</p>
+                    <h3 className="font-headline-sm text-headline-sm text-primary uppercase font-bold mb-2">{beneficio.titulo}</h3>
+                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">{beneficio.descripcion}</p>
                   </div>
                 ))}
               </div>
@@ -350,39 +355,39 @@ function App() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-                {products.map((product) => (
-                  <div key={product.title} className="group flex flex-col bg-surface-container-lowest rounded-3xl shadow-[0_8px_24px_-4px_rgba(138,11,61,0.06)] hover:shadow-[0_16px_36px_-6px_rgba(138,11,61,0.14)] transition-all duration-300 overflow-hidden">
+                {productos.map((producto) => (
+                  <div key={producto.nombre} className="group flex flex-col bg-surface-container-lowest rounded-3xl shadow-[0_8px_24px_-4px_rgba(138,11,61,0.06)] hover:shadow-[0_16px_36px_-6px_rgba(138,11,61,0.14)] transition-all duration-300 overflow-hidden">
                     <div className="relative h-60 overflow-hidden bg-surface-container-low">
                       <img
-                        alt={product.title}
+                        alt={producto.nombre}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        src={product.image}
+                        src={producto.imagen}
                       />
                       <span className="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-primary-fixed text-primary-container font-label-sm text-label-sm font-bold uppercase tracking-wider shadow-sm">
-                        {product.type}
+                        {producto.tipo}
                       </span>
                     </div>
                     <div className="p-6 flex flex-col flex-1 justify-between">
                       <div>
-                        <h3 className="font-headline-md text-headline-md text-primary font-bold uppercase leading-snug">{product.title}</h3>
+                        <h3 className="font-headline-md text-headline-md text-primary font-bold uppercase leading-snug">{producto.nombre}</h3>
                         <p className="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
-                          {product.type === 'Dulce'
+                          {producto.tipo === 'Dulce'
                             ? 'Mini tortas, alfajores, brownies, frutas con chocolate y postrecitos en vasito.'
-                            : product.type === 'Salado'
+                            : producto.tipo === 'Salado'
                               ? 'Empanadas, tartas, sándwiches de miga, pizzetas y bocaditos calientes.'
                               : 'Carne cortada a cuchillo, jamón y queso o pollo, con masa hojaldrada casera.'}
                         </p>
                       </div>
                       <div className="mt-6 pt-4 flex items-center justify-between border-t-0">
-                        <span className="font-headline-md text-headline-md text-primary-container font-bold">{product.price}</span>
-                        <a
-                          className="px-6 py-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-md text-label-md uppercase tracking-wider shadow-sm hover:shadow-md transition-all"
-                          href="https://wa.me/5493510000000?text=Hola%20Loli!%20Quiero%20pedir%20un%20presupuesto"
-                          rel="noopener noreferrer"
-                          target="_blank"
+                        <span className="font-headline-md text-headline-md text-primary-container font-bold">{producto.precio}</span>
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-md text-label-md uppercase tracking-wider shadow-sm hover:shadow-md transition-all"
+                          onClick={() => agregarAlCarrito(producto)}
                         >
-                          Pedir
-                        </a>
+                          <span className="material-symbols-outlined text-[18px]" aria-hidden="true">add_shopping_cart</span>
+                          Agregar
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -473,7 +478,7 @@ function App() {
                   <div className="mt-4">
                     <a
                       className="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-lg text-label-lg uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300"
-                      href={whatsappHref}
+                      href={enlaceWhatsApp}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -487,6 +492,106 @@ function App() {
           </section>
         </div>
       </main>
+
+      {carritoAbierto && (
+        <div className="fixed inset-0 z-[70] flex justify-end">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Cerrar carrito"
+            onClick={() => establecerCarritoAbierto(false)}
+          />
+          <section
+            className="relative flex h-full w-full max-w-md flex-col bg-surface-container-lowest shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-carrito"
+          >
+            <div className="flex items-center justify-between border-b border-primary-fixed px-5 py-5 sm:px-7">
+              <div>
+                <h2 id="titulo-carrito" className="font-headline-md text-headline-md font-bold uppercase text-primary">Tu carrito</h2>
+                <p className="font-body-sm text-on-surface-variant">{cantidadEnCarrito} productos</p>
+              </div>
+              <button
+                type="button"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-primary hover:bg-primary-fixed"
+                aria-label="Cerrar carrito"
+                onClick={() => establecerCarritoAbierto(false)}
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">close</span>
+              </button>
+            </div>
+
+            {carrito.length === 0 ? (
+              <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+                <span className="material-symbols-outlined mb-3 text-5xl text-primary-fixed-dim" aria-hidden="true">shopping_cart</span>
+                <p className="font-headline-sm text-headline-sm font-bold text-primary">Tu carrito está vacío</p>
+                <p className="mt-2 font-body-md text-on-surface-variant">Sumá productos del menú para armar tu pedido.</p>
+                <button
+                  type="button"
+                  className="mt-6 rounded-full bg-primary-fixed px-5 py-2.5 font-label-md font-bold text-primary-container"
+                  onClick={() => establecerCarritoAbierto(false)}
+                >
+                  Volver al menú
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex-1 space-y-4 overflow-y-auto px-5 py-5 sm:px-7">
+                  {carrito.map((producto) => (
+                    <article key={producto.nombre} className="flex gap-4 border-b border-primary-fixed pb-4">
+                      <img className="h-20 w-20 rounded-lg object-cover" src={producto.imagen} alt="" />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-label-md font-bold text-primary">{producto.nombre}</h3>
+                        <p className="mt-1 font-body-sm text-on-surface-variant">{producto.precio} c/u</p>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="inline-flex items-center gap-3">
+                            <button
+                              type="button"
+                              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed text-primary-container"
+                              aria-label={`Quitar una unidad de ${producto.nombre}`}
+                              onClick={() => cambiarCantidad(producto.nombre, -1)}
+                            >
+                              <span className="material-symbols-outlined text-[18px]" aria-hidden="true">remove</span>
+                            </button>
+                            <span className="min-w-4 text-center font-label-md font-bold text-primary">{producto.cantidad}</span>
+                            <button
+                              type="button"
+                              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-fixed text-primary-container"
+                              aria-label={`Agregar una unidad de ${producto.nombre}`}
+                              onClick={() => cambiarCantidad(producto.nombre, 1)}
+                            >
+                              <span className="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+                            </button>
+                          </div>
+                          <span className="font-label-md font-bold text-primary-container">
+                            {formatearPrecio(Number(producto.precio.replace(/\D/g, '')) * producto.cantidad)}
+                          </span>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <div className="border-t border-primary-fixed px-5 py-5 sm:px-7">
+                  <div className="mb-4 flex items-center justify-between font-label-lg font-bold text-primary">
+                    <span>Total estimado</span>
+                    <span>{formatearPrecio(subtotalCarrito)}</span>
+                  </div>
+                  <a
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-5 py-3 font-label-md font-bold uppercase tracking-wider text-on-secondary shadow-md transition hover:shadow-lg"
+                    href={enlacePedidoWhatsApp}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <span className="material-symbols-outlined text-[20px]" aria-hidden="true">chat</span>
+                    Enviar pedido por WhatsApp
+                  </a>
+                </div>
+              </>
+            )}
+          </section>
+        </div>
+      )}
 
       <footer className="w-full bg-primary text-on-primary">
         <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin pt-space-xl pb-space-lg">
@@ -559,4 +664,4 @@ function App() {
   )
 }
 
-export default App
+export default Pagina

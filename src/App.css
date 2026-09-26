@@ -26,6 +26,352 @@
   font-family: 'Alex Brush', cursive;
 }
 
+.zona-entrega-selector {
+  position: relative;
+  z-index: 30;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 31rem);
+  min-height: 4.75rem;
+  padding: 0.7rem 0.85rem 0.7rem 0.75rem;
+  overflow: visible;
+  border: 1px solid rgba(185, 0, 60, 0.2);
+  border-radius: 1.35rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 217, 223, 0.7));
+  box-shadow: 0 10px 24px -14px rgba(99, 0, 41, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.zona-entrega-selector::before {
+  position: absolute;
+  z-index: -1;
+  right: -2.2rem;
+  bottom: -3.6rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  background: rgba(255, 177, 193, 0.38);
+  content: '';
+  filter: blur(0.2rem);
+}
+
+.zona-entrega-selector__icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border-radius: 0.95rem;
+  color: #fff;
+  background: linear-gradient(145deg, #e5124f, #8a0b3d);
+  box-shadow: 0 7px 15px -7px rgba(138, 11, 61, 0.8);
+  font-size: 1.35rem;
+}
+
+.zona-entrega-selector__copy {
+  display: flex;
+  min-width: 7.25rem;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.zona-entrega-selector__eyebrow {
+  color: #b9003c;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.zona-entrega-selector__label {
+  color: #630029;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.zona-entrega-selector__control {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.zona-entrega-selector__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 2.7rem;
+  padding: 0.65rem 2.25rem 0.65rem 0.85rem;
+  border: 1px solid rgba(138, 11, 61, 0.18);
+  border-radius: 0.9rem;
+  outline: none;
+  color: #630029;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 4px 12px -10px rgba(99, 0, 41, 0.8);
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: left;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.zona-entrega-selector__trigger:hover,
+.zona-entrega-selector__trigger[aria-expanded='true'] {
+  border-color: rgba(185, 0, 60, 0.45);
+  background: #fff;
+}
+
+.zona-entrega-selector__trigger:focus-visible {
+  border-color: #e5124f;
+  box-shadow: 0 0 0 3px rgba(229, 18, 79, 0.17);
+}
+
+.zona-entrega-selector__arrow {
+  position: absolute;
+  top: 50%;
+  right: 0.7rem;
+  pointer-events: none;
+  color: #b9003c;
+  font-size: 1.1rem;
+  transform: translateY(-50%);
+  transition: transform 180ms ease;
+}
+
+.zona-entrega-selector__trigger[aria-expanded='true'] .zona-entrega-selector__arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.zona-entrega-selector__menu {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.7rem;
+  overflow: hidden;
+  border: 1px solid rgba(185, 0, 60, 0.2);
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, #fffdfc 0%, #fff3f5 100%);
+  box-shadow: 0 20px 36px -15px rgba(99, 0, 41, 0.42), 0 4px 12px rgba(185, 0, 60, 0.08);
+  animation: desplegar-zonas 180ms ease-out both;
+}
+
+.zona-entrega-selector__menu::before {
+  position: absolute;
+  top: -2.25rem;
+  right: 1.5rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(255, 177, 193, 0.38);
+  content: '';
+  filter: blur(0.3rem);
+}
+
+.zona-entrega-selector__menu-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.4rem 0.7rem;
+  border-bottom: 1px dashed rgba(185, 0, 60, 0.2);
+}
+
+.zona-entrega-selector__menu-badge {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.7rem;
+  color: #fff;
+  background: linear-gradient(145deg, #e5124f, #8a0b3d);
+  font-size: 1rem;
+}
+
+.zona-entrega-selector__menu-header div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.zona-entrega-selector__menu-header strong {
+  color: #630029;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.zona-entrega-selector__menu-header span:not(.material-symbols-outlined) {
+  color: #8a7075;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.zona-entrega-selector__options {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.55rem 0;
+}
+
+.zona-entrega-selector__option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.6rem;
+  padding: 0.55rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.8rem;
+  color: #630029;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.zona-entrega-selector__option:hover,
+.zona-entrega-selector__option:focus-visible,
+.zona-entrega-selector__option.is-selected {
+  border-color: rgba(229, 18, 79, 0.16);
+  background: rgba(255, 217, 223, 0.62);
+  outline: none;
+}
+
+.zona-entrega-selector__option:hover {
+  transform: translateX(0.15rem);
+}
+
+.zona-entrega-selector__option-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  color: #b9003c;
+  background: #fff;
+  box-shadow: 0 3px 9px -7px rgba(99, 0, 41, 0.8);
+  font-size: 1.1rem;
+}
+
+.zona-entrega-selector__option-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.zona-entrega-selector__option-copy strong {
+  overflow: hidden;
+  color: #630029;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zona-entrega-selector__option-copy small {
+  color: #8a7075;
+  font-size: 0.64rem;
+  font-weight: 600;
+}
+
+.zona-entrega-selector__check {
+  flex: 0 0 auto;
+  color: #e5124f;
+  font-size: 1.1rem;
+}
+
+.zona-entrega-selector__menu-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.4rem 0.15rem;
+  border-top: 1px dashed rgba(185, 0, 60, 0.2);
+  color: #b9003c;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.zona-entrega-selector__menu-footer .material-symbols-outlined {
+  font-size: 0.95rem;
+}
+
+@keyframes desplegar-zonas {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem) scale(0.98);
+    transform-origin: top right;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transform-origin: top right;
+  }
+}
+
+.zona-entrega-selector__sparkle {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  color: #e5124f;
+  font-size: 0.9rem;
+  opacity: 0.72;
+  transform: rotate(12deg);
+}
+
+@media (max-width: 520px) {
+  .zona-entrega-selector {
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 0.75rem;
+  }
+
+  .zona-entrega-selector__control {
+    flex-basis: calc(100% - 3.45rem);
+    margin-left: 3.45rem;
+  }
+}
+
+@keyframes entrada-desde-izquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes entrada-desde-derecha {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animar-entrada-izquierda {
+  animation: entrada-desde-izquierda 900ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.animar-entrada-derecha {
+  animation: entrada-desde-derecha 1000ms cubic-bezier(0.2, 0.75, 0.25, 1) 120ms both;
+}
+
 @keyframes floating-cake {
   0% {
     transform: translateY(-12px) rotate(-1deg);
@@ -96,7 +442,10 @@
   .anim-cake-shadow,
   .anim-float-slow,
   .anim-float-medium,
-  .anim-float-fast {
+  .anim-float-fast,
+  .animar-entrada-izquierda,
+  .animar-entrada-derecha,
+  .zona-entrega-selector__menu {
     animation: none !important;
   }
 }
