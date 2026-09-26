@@ -14,7 +14,7 @@ const destinosEnlacesMenu = {
   'Arma tu mesa': '#formulario-mesa',
 }
 
-const categoriasProductos = ['Mesas dulces', 'Mesas saladas', 'Comidas','Pasteleria']
+const categoriasProductos = ['Comidas', 'Pastelería']
 
 const beneficios = [
   {
@@ -67,9 +67,9 @@ const productos = [
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAHUNWXsJgLwtiOnmQbjzsS3vKBbxVgh4tZ9PLpDJZMB9uPFFRjum3CkGkwOPxq96D94UJKBdbWoFqtnSXbYPSSUvnV48zRP9kj3IbCU_wwi76z3WLOQTrnVrVXIUkThihU0fdG1nyCj9_i4GLXDBVHQmsrW0jAreU_FQIAEwTGeGMY_9nD6rchy4GfvRzBabfYJtkm8MoYrdpwAXZoUhcx3PdOf2hNAFENZ999jZGLH8V5p-suuQnGcw',
   },
   {
-    nombre:"Bandeja de alfajores de maicena x5",
+    nombre:"Bandejas de alfajores de maicena x5",
     tipo:'Dulce',
-    categorias:['Pasteleria'],
+    categorias:['Pastelería'],
     precio: '$40.000',
     imagen:''
   },
@@ -78,6 +78,13 @@ const productos = [
     tipo:"Salado",
     categorias:['Comidas'],
     precio:'$14.000',
+    imagen:''
+  },
+    {
+    nombre:"Bandejas surtidas x7",
+    tipo:'Dulce',
+    categorias:['Pastelería'],
+    precio: '$35.000',
     imagen:''
   },
 
@@ -103,7 +110,7 @@ const zonasEntrega = ['Córdoba Capital', 'Villa Allende', 'La Calera', 'Mendiol
 
 function Pagina() {
   const [menuMovilAbierto, establecerMenuMovilAbierto] = useState(false)
-  const [categoriaSeleccionada, establecerCategoriaSeleccionada] = useState('Mesas dulces')
+  const [categoriaSeleccionada, establecerCategoriaSeleccionada] = useState('Comidas')
   const [zonaElegida, establecerZonaElegida] = useState('Córdoba Capital')
   const [selectorZonaAbierto, establecerSelectorZonaAbierto] = useState(false)
   const [carrito, establecerCarrito] = useState([])
