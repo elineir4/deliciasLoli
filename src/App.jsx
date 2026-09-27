@@ -211,35 +211,35 @@ function Pagina() {
           <div className="flex shrink-0 items-center gap-2 md:gap-space-sm">
             <button
               type="button"
-              className="relative inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary-fixed text-primary-container transition-colors hover:bg-primary-fixed/70"
+              className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed text-primary-container transition-colors hover:bg-primary-fixed/70"
               aria-label={`Abrir carrito, ${cantidadEnCarrito} productos`}
               onClick={() => establecerCarritoAbierto(true)}
             >
-              <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+              <span className="material-symbols-outlined text-[19px]" aria-hidden="true">shopping_cart</span>
               {cantidadEnCarrito > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1 text-[11px] font-bold text-on-secondary">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-secondary px-1 text-[10px] font-bold text-on-secondary">
                   {cantidadEnCarrito}
                 </span>
               )}
             </button>
             <a
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-2.5 text-on-secondary shadow-[0_4px_12px_rgba(229,18,79,0.18)] transition-all hover:shadow-lg sm:h-auto sm:w-auto sm:px-space-md sm:py-2.5"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-2.5 text-on-secondary shadow-[0_4px_12px_rgba(229,18,79,0.18)] transition-all hover:shadow-lg sm:h-auto sm:w-auto sm:px-space-md sm:py-2"
               href={enlaceWhatsApp}
               rel="noopener noreferrer"
               target="_blank"
             >
-              <span className="material-symbols-outlined text-[18px]">chat</span>
+              <span className="material-symbols-outlined text-[17px] sm:text-[18px]">chat</span>
               <span className="hidden sm:inline">Hablar por WhatsApp</span>
             </a>
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface-container-low text-primary xl:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low text-primary xl:hidden"
               aria-label={menuMovilAbierto ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={menuMovilAbierto}
               aria-controls="menu-movil"
               onClick={() => establecerMenuMovilAbierto(!menuMovilAbierto)}
             >
-              <span className="material-symbols-outlined" aria-hidden="true">
+              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">
                 {menuMovilAbierto ? 'close' : 'menu'}
               </span>
             </button>
@@ -271,6 +271,14 @@ function Pagina() {
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10">
               <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
                 <div className="min-w-0 lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda lg:pt-24">
+                  <h1 className="hero-welcome-title font-display-lg text-display-lg-mobile md:text-display-lg text-primary-container uppercase tracking-tight leading-[1.08] mt-2 font-bold">
+                    MESAS DULCES Y SALADAS PARA TUS MEJORES MOMENTOS
+                  </h1>
+
+                  <p className="hero-welcome-copy font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
+                    En Delicias Loli preparamos todo casero, fresco y a tu medida: cumpleaños, reuniones, casamientos o un antojo cualquiera. ¡Vos disfrutá, nosotros armamos la mesa!
+                  </p>
+
                   <div className="zona-entrega-selector">
                     <span className="zona-entrega-selector__icon material-symbols-outlined" aria-hidden="true">location_on</span>
                     <div className="zona-entrega-selector__copy">
@@ -311,14 +319,6 @@ function Pagina() {
                       )}
                     </div>
                   </div>
-
-                  <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-primary-container uppercase tracking-tight leading-[1.08] mt-2 font-bold">
-                    MESAS DULCES Y SALADAS PARA TUS MEJORES MOMENTOS
-                  </h1>
-
-                  <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
-                    En Delicias Loli preparamos todo casero, fresco y a tu medida: cumpleaños, reuniones, casamientos o un antojo cualquiera. ¡Vos disfrutá, nosotros armamos la mesa!
-                  </p>
 
                   <div className="flex flex-wrap items-center gap-4 mt-4">
                     <a className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-secondary-container to-secondary text-on-secondary font-label-lg text-label-lg uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300" href="#productos">
@@ -401,8 +401,8 @@ function Pagina() {
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
                 {productosFiltrados.map((producto) => (
-                  <div key={producto.nombre} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_6px_18px_-5px_rgba(138,11,61,0.1)] transition-all duration-300 hover:shadow-[0_12px_24px_-6px_rgba(138,11,61,0.16)]">
-                    <div className="relative h-40 overflow-hidden bg-surface-container-low sm:h-44">
+                  <div key={producto.nombre} className="group flex min-w-0 flex-row overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_6px_18px_-5px_rgba(138,11,61,0.1)] transition-all duration-300 hover:shadow-[0_12px_24px_-6px_rgba(138,11,61,0.16)] sm:flex-col">
+                    <div className="relative h-24 w-24 flex-none overflow-hidden bg-surface-container-low sm:h-44 sm:w-auto">
                       {producto.imagen ? (
                         <img
                           alt={producto.nombre}
@@ -418,10 +418,10 @@ function Pagina() {
                         {producto.tipo}
                       </span>
                     </div>
-                    <div className="flex flex-1 flex-col justify-between p-4">
+                    <div className="flex min-w-0 flex-1 flex-col justify-between p-3 sm:p-4">
                       <div>
-                        <h3 className="font-headline-md text-lg text-primary font-bold uppercase leading-snug">{producto.nombre}</h3>
-                        <p className="font-body-md text-sm text-on-surface-variant mt-1.5 leading-relaxed">
+                        <h3 className="font-headline-md text-sm text-primary font-bold uppercase leading-snug sm:text-lg">{producto.nombre}</h3>
+                        <p className="product-description font-body-md text-xs text-on-surface-variant mt-1 leading-relaxed sm:mt-1.5 sm:text-sm">
                           {producto.tipo === 'Dulce'
                             ? 'Mini tortas, alfajores, brownies, frutas con chocolate y postrecitos en vasito.'
                             : producto.tipo === 'Salado'
@@ -429,11 +429,11 @@ function Pagina() {
                               : 'Carne cortada a cuchillo, jamón y queso o pollo, con masa hojaldrada casera.'}
                         </p>
                       </div>
-                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 pt-2">
-                        <span className="font-headline-md text-lg text-primary-container font-bold">{producto.precio}</span>
+                      <div className="mt-2 flex flex-wrap items-center justify-between gap-1 pt-1 sm:mt-4 sm:gap-2 sm:pt-2">
+                        <span className="font-headline-md text-base text-primary-container font-bold sm:text-lg">{producto.precio}</span>
                         <button
                           type="button"
-                          className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-4 py-2 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm transition-all hover:shadow-md"
+                          className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-secondary-container to-secondary px-2.5 py-1.5 text-xs font-bold uppercase tracking-wider text-on-secondary shadow-sm transition-all hover:shadow-md sm:gap-1.5 sm:px-4 sm:py-2 sm:text-sm"
                           onClick={() => agregarAlCarrito(producto)}
                         >
                           <span className="material-symbols-outlined text-[18px]" aria-hidden="true">add_shopping_cart</span>
