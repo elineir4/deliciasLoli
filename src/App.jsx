@@ -14,25 +14,8 @@ const destinosEnlacesMenu = {
   'Arma tu mesa': '#formulario-mesa',
 }
 
-const categoriasProductos = ['Comidas', 'Pastelería']
-
-const beneficios = [
-  {
-    icono: 'cookie',
-    titulo: 'Todo casero y hecho a pedido',
-    descripcion: 'Ingredientes de primera calidad, sin conservantes y horneado en el día para garantizar sabor inigualable.',
-  },
-  {
-    icono: 'dinner_dining',
-    titulo: 'Mesas armadas según invitados',
-    descripcion: 'Cálculo exacto de porciones dulces y saladas para que tu festejo sea perfecto y nadie se quede con ganas.',
-  },
-  {
-    icono: 'local_shipping',
-    titulo: 'Entrega a domicilio y retiro',
-    descripcion: 'Coordinamos el horario exacto para que todo llegue impecable, fresco y listo para servir en tu evento.',
-  },
-]
+const categoriaPasteleriaIndividual = 'Pastelería individuales'
+const categoriasProductos = ['Comidas', categoriaPasteleriaIndividual]
 
 const pasosPedido = [
   { titulo: 'Contanos tu evento', descripcion: 'Fecha, lugar y cantidad de invitados.' },
@@ -69,7 +52,7 @@ const productos = [
   {
     nombre:"Bandejas de alfajores de maicena x5",
     tipo:'Dulce',
-    categorias:['Pastelería'],
+    categorias:[categoriaPasteleriaIndividual],
     precio: '$40.000',
     imagen:''
   },
@@ -83,7 +66,7 @@ const productos = [
     {
     nombre:"Bandejas surtidas x7",
     tipo:'Dulce',
-    categorias:['Pastelería'],
+    categorias:[categoriaPasteleriaIndividual],
     precio: '$35.000',
     imagen:''
   },
@@ -382,22 +365,6 @@ function Pagina() {
               </div>
             </div>
 
-          </section>
-
-          <section className="w-full border-b border-primary-fixed bg-surface-container-lowest py-8 md:py-12">
-            <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-                {beneficios.map((beneficio) => (
-                  <div key={beneficio.titulo} className="flex flex-col items-center text-center p-6 rounded-2xl bg-surface-container-low/40 hover:bg-surface-container-low transition-colors duration-300">
-                    <div className="w-16 h-16 rounded-full bg-primary-fixed/50 flex items-center justify-center text-secondary mb-4 shadow-sm">
-                      <span className="material-symbols-outlined text-[32px]">{beneficio.icono}</span>
-                    </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary uppercase font-bold mb-2">{beneficio.titulo}</h3>
-                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">{beneficio.descripcion}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </section>
 
           <section className="w-full scroll-mt-24 border-b border-primary-fixed bg-surface-container-lowest py-10 md:py-16" id="productos">
