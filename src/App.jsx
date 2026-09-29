@@ -14,8 +14,8 @@ const destinosEnlacesMenu = {
   'Arma tu mesa': '#formulario-mesa',
 }
 
-const categoriaPasteleriaIndividual = 'Pastelería individuales'
-const categoriasProductos = ['Comidas', categoriaPasteleriaIndividual]
+const categoriaPasteleria = 'Pastelería'
+const categoriasProductos = ['Comidas', categoriaPasteleria]
 
 const pasosPedido = [
   { titulo: 'Contanos tu evento', descripcion: 'Fecha, lugar y cantidad de invitados.' },
@@ -50,11 +50,11 @@ const productos = [
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAHUNWXsJgLwtiOnmQbjzsS3vKBbxVgh4tZ9PLpDJZMB9uPFFRjum3CkGkwOPxq96D94UJKBdbWoFqtnSXbYPSSUvnV48zRP9kj3IbCU_wwi76z3WLOQTrnVrVXIUkThihU0fdG1nyCj9_i4GLXDBVHQmsrW0jAreU_FQIAEwTGeGMY_9nD6rchy4GfvRzBabfYJtkm8MoYrdpwAXZoUhcx3PdOf2hNAFENZ999jZGLH8V5p-suuQnGcw',
   },
   {
-    nombre:"Bandejas de alfajores de maicena x5",
-    tipo:'Dulce',
-    categorias:[categoriaPasteleriaIndividual],
+    nombre: 'Bandejas de alfajores de maicena x5',
+    tipo: 'Dulce',
+    categorias: [categoriaPasteleria],
     precio: '$40.000',
-    imagen:''
+    imagen: '',
   },
   {
     nombre:"Pizza Muzza",
@@ -63,17 +63,13 @@ const productos = [
     precio:'$14.000',
     imagen:''
   },
-    {
-    nombre:"Bandejas surtidas x7",
-    tipo:'Dulce',
-    categorias:[categoriaPasteleriaIndividual],
+  {
+    nombre: 'Bandejas surtidas x7',
+    tipo: 'Dulce',
+    categorias: [categoriaPasteleria],
     precio: '$35.000',
-    imagen:''
+    imagen: '',
   },
-
-
-
-
 ]
 
 const muestrasMesas = [
@@ -267,17 +263,18 @@ function Pagina() {
 
       <main className="w-full pt-20 bg-background">
         <div className="flex flex-col w-full">
-          <section className="relative w-full scroll-mt-20 border-b border-primary-fixed bg-primary-fixed/30 overflow-hidden pb-8 pt-3 sm:pb-10 sm:pt-4 lg:pb-12 lg:pt-4" id="hero-section">
+          <section className="hero-section relative w-full scroll-mt-20 border-b border-primary-fixed bg-primary-fixed/30 pb-8 pt-3 sm:pb-10 sm:pt-4 lg:pb-12 lg:pt-4" id="hero-section">
             <div className="max-w-6xl mx-auto px-margin-mobile md:px-margin relative z-10">
               <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
-                <div className="min-w-0 lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda lg:pt-24">
-                  <h1 className="hero-welcome-title font-display-lg text-display-lg-mobile md:text-display-lg text-primary-container uppercase tracking-tight leading-[1.08] mt-2 font-bold">
-                    MESAS DULCES Y SALADAS PARA TUS MEJORES MOMENTOS
-                  </h1>
-
-                  <p className="hero-welcome-copy font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
-                    En Delicias Loli preparamos todo casero, fresco y a tu medida: cumpleaños, reuniones, casamientos o un antojo cualquiera. ¡Vos disfrutá, nosotros armamos la mesa!
-                  </p>
+                <div className="min-w-0 lg:col-span-7 flex flex-col gap-space-sm items-start text-left animar-entrada-izquierda lg:pt-28">
+                <h1 className="hero-welcome-title flex flex-col text-left mt-4">
+                 <span className="font-black uppercase tracking-tighter text-5xl sm:text-7xl lg:text-[7rem] leading-none text-primary-container">
+                   DULCE
+                 </span>
+                  <span className="font-['Great_Vibes'] normal-case text-amber-500 text-4xl sm:text-6xl lg:text-9xl -mt-4 sm:-mt-6 lg:-mt-9 ml-8 sm:ml-12 lg:ml-20">
+                    Encuentro
+                  </span>
+              </h1>
 
                   <div className="zona-entrega-selector">
                     <span className="zona-entrega-selector__icon material-symbols-outlined" aria-hidden="true">location_on</span>

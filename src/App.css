@@ -26,6 +26,11 @@
   font-family: 'Alex Brush', cursive;
 }
 
+.hero-section {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 .zona-entrega-selector {
   position: relative;
   z-index: 30;
@@ -161,6 +166,13 @@
   background: linear-gradient(145deg, #fffdfc 0%, #fff3f5 100%);
   box-shadow: 0 20px 36px -15px rgba(99, 0, 41, 0.42), 0 4px 12px rgba(185, 0, 60, 0.08);
   animation: desplegar-zonas 180ms ease-out both;
+}
+
+@media (max-width: 520px) {
+  .zona-entrega-selector__menu {
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+  }
 }
 
 .zona-entrega-selector__menu::before {
