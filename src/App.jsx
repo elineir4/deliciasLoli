@@ -70,6 +70,34 @@ const productos = [
     precio: '$35.000',
     imagen: '',
   },
+  {
+    nombre: 'Conitos de chocolate y dulce de leche x10',
+    tipo: 'Dulce',
+    categorias: [categoriaPasteleria],
+    precio: '$25.000',
+    imagen: '',
+  },
+  {
+    nombre: 'Brownies x6',
+    tipo: 'Dulce',
+    categorias: [categoriaPasteleria],
+    precio: '$30.000',
+    imagen: '',
+  },
+  {
+    nombre: 'Docena de Empanadas Salteñas',
+    tipo: 'Salado',
+    categorias: ['Comidas'],
+    precio: '$18.000',
+    imagen: '',
+  },
+  {
+    nombre: 'Tarta de verduras',
+    tipo: 'Salado',
+    categoria: ['Comidas'],
+    precio: '$15.000',
+    imagen:''
+  }
 ]
 
 const muestrasMesas = [
