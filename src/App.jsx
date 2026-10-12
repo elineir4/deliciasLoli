@@ -94,10 +94,10 @@ const productos = [
   {
     nombre: 'Tarta de verduras',
     tipo: 'Salado',
-    categoria: ['Comidas'],
+    categorias: ['Comidas'],
     precio: '$15.000',
-    imagen:''
-  }
+    imagen: '',
+  },
 ]
 
 const muestrasMesas = [
@@ -127,7 +127,9 @@ function Pagina() {
   const [mesasElegidas, establecerMesasElegidas] = useState([])
   const [errorFormularioMesa, establecerErrorFormularioMesa] = useState('')
   const muestrasMesasRef = useRef(null)
-  const productosFiltrados = productos.filter((producto) => producto.categorias.includes(categoriaSeleccionada))
+  const productosFiltrados = productos.filter(
+    (producto) => Array.isArray(producto.categorias) && producto.categorias.includes(categoriaSeleccionada),
+  )
 
   const mensajeWhatsApp = `Hola Delicias Loli! Soy de ${zonaElegida} y me gustaría consultar sobre:.`
   const enlaceWhatsApp = `https://wa.me/543515290303?text=${encodeURIComponent(mensajeWhatsApp)}`
